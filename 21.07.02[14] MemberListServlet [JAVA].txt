@@ -1,0 +1,98 @@
+package hkit.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import hkit.vo.Member;
+
+@WebServlet("/member/list")
+public class MemberListServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+		
+		//String driver = "oracle.jdbc.OracleDriver";
+		//String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		//String userId = "hr";
+		//String password = "hr";
+		
+		try {
+			ServletContext sc = getServletContext();
+			conn = (Connection)sc.getAttribute("conn");
+			
+			/*Class.forName(sc.getInitParameter("driver"));
+			conn = DriverManager.getConnection(sc.getInitParameter("url"), 
+										sc.getInitParameter("userId"), 
+										sc.getInitParameter("password"));*/
+			
+			String sql = "select * from members order by mno desc";
+			st = conn.createStatement();
+			rs = st.executeQuery(sql);
+			
+			ArrayList<Member> members = new ArrayList<Member>();
+			while(rs.next()) {
+				Member temp = new Member();
+				temp.setMno(rs.getInt("mno"));
+				temp.setEmail(rs.getString("email"));
+				temp.setMname(rs.getString("mname"));
+				temp.setCre_date(rs.getDate("cre_date"));
+				
+				members.add(temp);
+				
+			}
+			
+			//request에 회원목록 보관
+			request.setAttribute("members", members);
+			
+			//jsp로 출력을 위임
+			RequestDispatcher rd = request.getRequestDispatcher("/member/MemberList.jsp");
+			
+			rd.include(request, response);
+			
+			/* 뷰(jsp)로 분리
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<html><head><title>회원목록</title></head>");
+			out.println("<body><h1>회원목록</h1>");
+			out.println("<p><a href='add'>신규 회원</a></p>");
+			while(rs.next()) {
+				out.println(rs.getInt("mno") + " , " +
+							"<a href='update?mno="+rs.getInt("mno")+"'>" + rs.getString("mname") + "</a> , " +
+							rs.getString("email") + " , " +
+							rs.getDate("cre_date") + "<a href='delete?mno="+rs.getInt("mno")+"'>삭제</a><br>");
+			}
+			out.println("</body></html>");
+			*/
+		}catch(Exception e) {
+			//e.printStackTrace();
+			request.setAttribute("error", e);
+			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+			rd.forward(request, response);
+		}finally {
+			try {
+				if(rs != null) rs.close();
+				if(st != null) st.close();
+				//if(conn != null) conn.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
