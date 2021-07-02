@@ -1,0 +1,21 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=UTF-8">
+<title>Tail</title>
+<style type="text/css">
+	#tail {
+		height:20px;
+		background-color: #f0fff0;
+		padding:5px;
+		margin-top:10px;
+	}
+</style>
+</head>
+<body>
+<div id="tail">
+	MPMS &copy; 2021
+</div>
+</body>
+</html>
