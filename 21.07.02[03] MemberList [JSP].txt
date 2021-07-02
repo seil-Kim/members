@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+	import="java.util.*, hkit.vo.*" errorPage="/Error.jsp"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=UTF-8">
+<title>MemberList</title>
+</head>
+<body>
+<jsp:include page="/Header.jsp"/>
+<h1>회원목록</h1>
+<a href="add">신규 회원</a>
+<hr>
+<%
+	ArrayList<Member> members = (ArrayList<Member>)request.getAttribute("members");
+
+	for( Member member : members){
+%>
+		<%=member.getMno() %> ,
+		<a href="update?mno=<%=member.getMno() %>"><%=member.getMname() %></a> ,
+		<%=member.getEmail() %> ,
+		<%=member.getCre_date() %><a href="delete?mno=<%=member.getMno() %>">[삭제]</a><br>
+<%	}
+	
+%>
+<jsp:include page="/Tail.jsp"/>
+</body>
+</html>
