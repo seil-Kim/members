@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+		import="hkit.vo.*"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=UTF-8">
+<title>Header</title>
+<style type="text/css">
+	#top {
+		height:20px;
+		background-color: #00008b;
+		color:#ffffff;
+		padding:5px;
+	}
+</style>
+</head>
+<body>
+<%
+	Member member = (Member)session.getAttribute("member");
+%>
+<div id="top">
+	Member Project Management System
+	<span style="float:right;">
+		<%=member.getMname() %> <a style="color:white" href="<%=request.getContextPath() %>/auth/logout">LOGOUT</a>
+	</span>
+	
+</div>
+</body>
+</html>
