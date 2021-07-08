@@ -1,0 +1,24 @@
+<%@ page language="java" contentType="text/html; cha	rset=UTF-8"
+    pageEncoding="UTF-8" import="hkit.vo.*"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<jsp:include page="/Header.jsp"/>
+	<h1>회원정보</h1>
+		<form action='update' method='post'>
+			번 호 : <input type='text' name='mno' value="${member.mno}" readonly><br>
+			이 름 : <input type='text' name='mname' value="${member.mname}"><br>
+			이메일 : <input type='text' name='email' value="${member.email}"><br>
+			암 호 : <input type='password' name='pwd' value="${member.pwd}" readonly><br>
+			가입일자 : <input type='text' name='cre_date' value="${member.cre_date}"><br>
+			<input type='submit' value='수정'>
+			<input type='reset' value='취소'>
+			<input type='button' value='삭제' onclick='location.href="delete?mno=${member.mno}"'>
+		</form>
+	<jsp:include page="/Tail.jsp"/>
+</body>
+</html>
