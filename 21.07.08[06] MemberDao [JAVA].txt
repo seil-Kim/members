@@ -1,0 +1,53 @@
+package hkit.vo;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MemberDao {
+	Connection conn;
+	
+	public void setConnection(Connection conn) {
+		this.conn = conn;
+	}
+	
+	public List<Member> selectList() /*throws Exception*/{
+		
+		Statement st = null;
+		ResultSet rs = null;
+		
+		ArrayList<Member> members = new ArrayList<Member>();
+		
+		try {
+			
+			String sql = "select * from members order by mno desc";
+			
+			st = conn.createStatement();
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()) {
+				Member temp = new Member();
+				temp.setMno(rs.getInt("mno"));
+				temp.setEmail(rs.getString("email"));
+				temp.setMname(rs.getString("mname"));
+				temp.setCre_date(rs.getDate("cre_date"));
+				
+				members.add(temp);
+			}
+		}catch(Exception e){
+			//throw e;
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs != null) rs.close();
+				if(st != null) st.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return members;
+	}
+	
+}
